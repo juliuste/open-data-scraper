@@ -1,0 +1,96 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    # keep request limits in mind before increasing the cron frequency
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 2 * * *'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v3
+      name: Set up pnpm
+      with:
+        version: 8
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Install dependencies
+      run: pnpm install
+    - name: Run tests
+      run: pnpm test
+      env:
+        CI: true
+
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+    environment: main
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3
+    - name: Install awscli
+      run: pip3 install awscli
+
+    - name: Set up awscli configuration
+      env:
+        S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+        S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+        S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+      run: |
+        set -e;
+        mkdir ~/.aws;
+        echo "
+        [default]
+        aws_access_key_id=$S3_ACCESS_KEY_ID
+        aws_secret_access_key=$S3_SECRET_ACCESS_KEY
+        " > ~/.aws/credentials;
+        echo "
+        [default]
+        endpoint_url = $S3_ENDPOINT
+        s3 =
+          multipart_threshold = 2000MB
+          multipart_chunksize = 2000MB
+        " > ~/.aws/config;
+
+    - name: Install system dependencies
+      run: |
+        sudo add-apt-repository ppa:ubuntugis/ppa
+        sudo apt-get update
+        sudo apt-get install -y gdal-bin
+    - uses: pnpm/action-setup@v3
+      name: Set up pnpm
+      with:
+        version: 8
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Install node dependencies
+      run: pnpm install
+
+    - name: "Process dataset: VG250-EW"
+      if: ${{ success() }} # this should allow the other steps to run, but should still mark the workflow as failing
+      env:
+        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      run: |
+        set -e;
+        ./scrapers/vg250-ew/index.sh
+        currentobj=$(aws s3api head-object --bucket $S3_BUCKET_NAME --key vg250-ew/data.json.gz || echo 'not-yet-existing');
+        newhash=$(cat scrapers/vg250-ew/data/output.json.gz | md5sum);
+        if [ $(echo $currentobj | grep $newhash | wc -l) -ne 1 ]
+        then
+          aws s3 cp --acl public-read scrapers/vg250-ew/data/output.json.gz s3://"$S3_BUCKET_NAME"/vg250-ew/data.json.gz
+        else
+          echo 'file unchanged, skipping.'
+        fi;

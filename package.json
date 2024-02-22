@@ -1,0 +1,34 @@
+{
+  "name": "open-data-scraper",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Scraper that re-publishes several open datasets which are either hard to locate (no stable URL) or hard to use (complicated format), or both.",
+  "homepage": "https://github.com/juliuste/open-data-scraper",
+  "bugs": "https://github.com/juliuste/open-data-scraper/issues",
+  "repository": "juliuste/open-data-scraper",
+  "license": "ISC",
+  "author": "Julius Tens <mail@juliustens.eu>",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "check-deps": "depcheck --ignores='ts-node,@types/node'",
+    "lint": "ts-standard scrapers",
+    "fix": "npm run lint -- --fix",
+    "test": "npm run lint && npm run check-deps && npm run build"
+  },
+  "dependencies": {
+    "fp-ts": "^2.16.2",
+    "io-ts": "^2.2.21",
+    "load-json-file": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "20",
+    "depcheck": "^1.4.5",
+    "ts-node": "^10.9.2",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
