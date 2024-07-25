@@ -17,6 +17,7 @@ The transformed dataset is a (gzipped) JSON document - a list consisting of elem
 `name.hsb` | _string (optional)_ | Name of the entity, in Upper Sorbian. Present for entities where Upper Sorbian is a recognized minority language. |
 `name.frr` | _string (optional)_ | Name of the entity, in North Frisian. Present for entities where North Frisian is a recognized minority language. | `Höögel`
 `name.stq` | _string (optional)_ | Name of the entity, in Sater Frisian. Present for entities where Sater Frisian is a recognized minority language. |
+`name.nds` | _string (optional)_ | Name of the entity, in Low German. Present for entities where Low German is a recognized minority language. |
 `additionalName` | _string (optional)_ | Additional name of this entity, in german, such as "Hansestadt", "Ostseebad" etc. |
 `canBePrefixedWithTypeName` | **boolean** | Flag indicating if the (german) name can be prefixed with `type.name`. Usually true, however there are cases in which this is not possible, e.g. for grammatical reasons, as in "Oberbergischer Kreis", which does not get prefixed with the term "Kreis". | `true`
 `nuts` | **string** | [NUTS code](https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics) of a region this entity is located in (or equal to). | `todo`

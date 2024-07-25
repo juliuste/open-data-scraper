@@ -67,7 +67,8 @@ const mapAreaEntity = ({ geometry, properties }: RawAreaEntity): AreaEntity => {
       dsb: translations.dsb,
       hsb: translations.hsb,
       frr: translations.frr,
-      stq: translations.stq
+      stq: translations.stq,
+      nds: translations.nds
     },
     additionalName: additionalNameMap.get(properties.ARS),
     canBePrefixedWithTypeName: properties.NBD === 'ja',

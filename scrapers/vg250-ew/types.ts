@@ -52,7 +52,7 @@ export const RawTranslationEntitySchema = t.strict({
   properties: t.strict({
     ARS: t.string,
     RGS: t.string,
-    SPR: t.union([t.literal('dan'), t.literal('dsb'), t.literal('hsb'), t.literal('frr'), t.literal('stq')])
+    SPR: t.union([t.literal('dan'), t.literal('dsb'), t.literal('hsb'), t.literal('frr'), t.literal('stq'), t.literal('nds')])
   })
 })
 export type RawTranslationEntity = t.TypeOf<typeof RawTranslationEntitySchema>
@@ -77,6 +77,7 @@ export interface AreaEntity {
     hsb?: string
     frr?: string
     stq?: string
+    nds?: string
   }
   additionalName?: string
   canBePrefixedWithTypeName: boolean
