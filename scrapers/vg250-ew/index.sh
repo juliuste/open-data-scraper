@@ -37,7 +37,6 @@ VG_WERTE"
 if [[ $FILES != $EXPECTED_FILES ]]; then echo "Unexpected file detected in VG250 source"; echo $FILES && exit 1; fi
 
 echo 'Converting…'
-mkdir -p "$STEP_1_DIR"
 ogr2ogr -f GeoJSON "$STEP_1_DIR/gemeinden.json" -s_srs "$SOURCE_DIR/VG250_GEM.prj" -t_srs EPSG:4326 "$SOURCE_DIR/VG250_GEM.shp"
 ogr2ogr -f GeoJSON "$STEP_1_DIR/kreise.json" -s_srs "$SOURCE_DIR/VG250_KRS.prj" -t_srs EPSG:4326 "$SOURCE_DIR/VG250_KRS.shp"
 ogr2ogr -f GeoJSON "$STEP_1_DIR/laender.json" -s_srs "$SOURCE_DIR/VG250_LAN.prj" -t_srs EPSG:4326 "$SOURCE_DIR/VG250_LAN.shp"
