@@ -1,0 +1,141 @@
+@prefix cc: <http://creativecommons.org/ns#>.
+@prefix dbo: <http://dbpedia.org/ontology/>.
+@prefix dbp: <http://dbpedia.org/property/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix gr: <http://purl.org/goodrelations/v1#>.
+@prefix juso: <http://rdfs.co/juso/>.
+@prefix locn: <http://www.w3.org/ns/locn#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix schema: <http://schema.org/>.
+@prefix status: <http://www.w3.org/2003/06/sw-vocab-status/ns#>.
+@prefix swrl: <http://www.w3.org/2003/11/swrl#>.
+@prefix swrla: <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#>.
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix vann: <http://purl.org/vocab/vann/>.
+@prefix wd: <http://www.wikidata.org/entity/>.
+@prefix wdt: <http://www.wikidata.org/prop/direct/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix codeforde: <https://lod.codefor.de/vocabulary/codeforde/>.
+
+# ontology metadata
+
+codeforde: a owl:Ontology, cc:Work ;
+  rdfs:label "Code for Germany Ontology"@en ;
+  dct:description "A collection of terms with a focus on German open government data, built by the Code for Germany community."@en ;
+  rdfs:seeAlso <https://github.com/juliuste/open-data-scraper> ;
+  vann:preferredNamespacePrefix "codeforde" ;
+  vann:preferredNamespaceUri "https://lod.codefor.de/vocabulary/codeforde/" ;
+  dct:creator [ foaf:mbox "mail@juliustens.eu"; foaf:name "Julius Tens" ] ;
+  owl:versionInfo "0.1.0" ;
+  cc:license <https://creativecommons.org/publicdomain/zero/1.0/> .
+
+# classes
+
+## administrative levels
+
+codeforde:Bundesland a owl:Class;
+  rdfs:label "Federal state (Germany)"@en, "Bundesland (Deutschland)"@de;
+  rdfs:subClassOf juso:FederatedState, juso:FirstLevelAdministrativeDivision;
+  owl:equivalentClass wd:Q1221156;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://en.wikipedia.org/wiki/States_of_Germany>;
+  owl:hasKey (codeforde:ars), (codeforde:ags).
+
+codeforde:Regierungsbezirk a owl:Class;
+  rdfs:label "Governmental district (Germany)"@en, "Regierungsbezirk (Deutschland)"@de;
+  rdfs:subClassOf juso:SecondLevelAdministrativeDivision;
+  owl:equivalentClass wd:Q22721;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://en.wikipedia.org/wiki/Regierungsbezirk>;
+  owl:hasKey (codeforde:ars), (codeforde:ags).
+
+codeforde:Kreis a owl:Class;
+  rdfs:label "Kreis (Deutschland)"@de;
+  rdfs:comment "(Land-)Kreis oder kreisfreie Stadt"@de;
+  rdfs:subClassOf juso:AdministrativeDivision;
+  owl:equivalentClass wd:Q106658;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://en.wikipedia.org/wiki/Districts_of_Germany>;
+  owl:hasKey (codeforde:ars), (codeforde:ags).
+
+codeforde:Verwaltungsgemeinschaft a owl:Class;
+  rdfs:label "Verwaltungsgemeinschaft (Deutschland)"@de;
+  rdfs:subClassOf juso:AdministrativeDivision;
+  owl:equivalentClass wd:Q13405470;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://en.wikipedia.org/wiki/Gemeindeverband>;
+  owl:hasKey (codeforde:ars).
+
+codeforde:Gemeinde a owl:Class;
+  rdfs:label "Municipality (Germany)"@en, "Gemeinde (Deutschland)"@de;
+  rdfs:subClassOf juso:Municipality;
+  owl:equivalentClass wd:Q262166;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://en.wikipedia.org/wiki/Municipalities_of_Germany>;
+  owl:hasKey (codeforde:ars), (codeforde:ags).
+
+[] a owl:AllDisjointClasses ;
+	owl:members (
+		codeforde:Bundesland
+    codeforde:Regierungsbezirk
+	) .
+
+[] a owl:AllDisjointClasses ;
+	owl:members (
+    codeforde:Regierungsbezirk
+    codeforde:Kreis
+	) .
+
+[] a owl:AllDisjointClasses ;
+	owl:members (
+    codeforde:Regierungsbezirk
+    codeforde:Gemeinde
+	) .
+
+# properties
+
+codeforde:ars a owl:DatatypeProperty;
+  rdfs:label "ARS, Amtlicher Regionalschlüssel (Deutschland)"@de;
+  rdfs:range xsd:string;
+  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
+  rdfs:subPropertyOf dct:identifier;
+  owl:equivalentProperty wdt:P439;
+  status:term_status "unstable"@en;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://de.wikipedia.org/wiki/Amtlicher_Gemeindeschl%C3%BCssel>.
+
+codeforde:ags a owl:DatatypeProperty;
+  rdfs:label "AGS, Amtlicher Gemeindeschlüssel (Deutschland)"@de;
+  rdfs:range xsd:string;
+  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Gemeinde;
+  rdfs:subPropertyOf dct:identifier;
+  owl:equivalentProperty wdt:P1388;
+  status:term_status "unstable"@en;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://de.wikipedia.org/wiki/Amtlicher_Gemeindeschl%C3%BCssel>.
+
+codeforde:dlmObjectId a owl:DatatypeProperty;
+  rdfs:label "DLM object id"@en, "DLM-Obkekt-ID"@de;
+  rdfs:comment "ID im Digitalen Landschaftsmodell (DLM)"@de;
+  rdfs:range xsd:string;
+  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
+  rdfs:subPropertyOf dct:identifier;
+  status:term_status "unstable"@en;
+  rdfs:isDefinedBy codeforde:;
+  rdfs:seeAlso <https://de.wikipedia.org/wiki/Digitales_Landschaftsmodell>.
+
+codeforde:seatOfAdministration a owl:ObjectProperty;
+  rdfs:label "Seat of Administration (Germany)"@en, "Verwaltungssitz (Deutschland)"@de;
+  rdfs:comment "Municipality which contains the seat of administration for this administrative entity"@en, "Gemeinde, in der sich der Verwaltungssitz dieser Verwaltungseinheit befindet"@de;
+  rdfs:range codeforde:Gemeinde;
+  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft;
+  rdfs:subPropertyOf wdt:Q1306755;
+  status:term_status "unstable"@en;
+  rdfs:isDefinedBy codeforde:.

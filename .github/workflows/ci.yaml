@@ -35,6 +35,10 @@ jobs:
     steps:
     - name: Checkout main
       uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -91,6 +95,23 @@ jobs:
         if [ $(echo $currentobj | grep $newhash | wc -l) -ne 1 ]
         then
           aws s3 cp --acl public-read scrapers/vg250-ew/data/output.json.gz s3://"$S3_BUCKET_NAME"/vg250-ew/data.json.gz
+        else
+          echo 'file unchanged, skipping.'
+        fi;
+
+    - name: "Generate linked data: VG250-EW"
+      # todo: do not run if processing the dataset failed
+      if: ${{ success() }} # this should allow the other steps to run, but should still mark the workflow as failing
+      env:
+        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      run: |
+        set -e;
+        ./linked-data/vg250-ew/index.sh
+        currentobj=$(aws s3api head-object --bucket $S3_BUCKET_NAME --key vg250-ew/data.ttl.gz || echo 'not-yet-existing');
+        newhash=$(cat linked-data/vg250-ew/data/output.ttl.gz | md5sum);
+        if [ $(echo $currentobj | grep $newhash | wc -l) -ne 1 ]
+        then
+          aws s3 cp --acl public-read linked-data/vg250-ew/data/output.ttl.gz s3://"$S3_BUCKET_NAME"/vg250-ew/data.ttl.gz
         else
           echo 'file unchanged, skipping.'
         fi;

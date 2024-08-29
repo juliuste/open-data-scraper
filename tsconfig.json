@@ -4,7 +4,7 @@
     "module": "Node16",
     "lib": ["ES2022"],
     "moduleResolution": "Node16",
-    "rootDir": "scrapers",
+    "rootDir": ".",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -22,7 +22,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
   },
-  "include": ["scrapers/**/*"],
+  "include": ["scrapers/**/*", "linked-data/**/*"],
   "ts-node": {
     "esm": true
   }

@@ -1,0 +1,255 @@
+@prefix codeforde: <https://lod.codefor.de/vocabulary/codeforde/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix dbo: <https://dbpedia.org/ontology/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix geo: <http://www.opengis.net/ont/geosparql#>.
+@prefix gn: <http://www.geonames.org/ontology#>.
+@prefix juso: <http://rdfs.co/juso/>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix schema: <http://schema.org/>.
+@prefix status: <http://www.w3.org/2003/06/sw-vocab-status/ns#>.
+@prefix wdt: <http://www.wikidata.org/prop/direct/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+# todo: centroid geometries, sub-types (e.g. Freistaat, Land, …)
+
+# level 1 (Bundesrepublik)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 1)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class juso:Country
+  ].
+
+# level 2 (Bundesländer)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 2)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class codeforde:Bundesland
+  ].
+
+# level 3 (Regierungsbezirke)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 3)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class codeforde:Regierungsbezirk
+  ].
+
+# level 4 (Kreise)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 4)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class codeforde:Kreis
+  ].
+
+# level 5 (Verwaltungsgemeinschaften)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 5)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class codeforde:Verwaltungsgemeinschaft
+  ].
+
+# level 6 (Gemeinden)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[?(@.administrativeLevel == 6)]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+    rr:class codeforde:Gemeinde
+  ].
+
+# common attributes
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[*]"
+  ];
+  rr:subjectMap [
+    rr:template "resource/by-key/ars-padded/{.paddedArsId}";
+  ];
+  rr:predicateObjectMap [
+    rr:predicate codeforde:ags;
+    rr:objectMap [
+      rr:datatype xsd:string;
+      rr:termType rr:Literal;
+      rml:reference "$.agsId"
+    ]
+  ], [
+    rr:predicate codeforde:ars;
+    rr:objectMap [
+      rr:datatype xsd:string;
+      rr:termType rr:Literal;
+      rml:reference "$.arsId"
+    ]
+  ], [
+    rr:predicate codeforde:seatOfAdministration;
+    rr:objectMap [
+      rr:termType rr:IRI;
+      rr:template "resource/by-key/ars-padded/{.seatOfAdministrationArsId}"
+    ]
+  ], [
+    rr:predicate juso:parent;
+    rr:objectMap [
+      rr:termType rr:IRI;
+      rr:template "resource/by-key/ars-padded/{.parent}"
+    ]
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.de";
+      rr:language "de"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.da";
+      rr:language "da"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.dsb";
+      rr:language "dsb"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.hsb";
+      rr:language "hsb"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.frr";
+      rr:language "frr"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.stq";
+      rr:language "stq"
+    ];
+  ], [
+    rr:predicate juso:name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".name.nds";
+      rr:language "nds"
+    ];
+  ], [
+    rr:predicate juso:alternate_name;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rml:reference ".additionalNameDE";
+      rr:language "de"
+    ];
+  ], [
+    rr:predicate gn:population;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rr:datatype xsd:positiveInteger;
+      rml:reference ".population"
+    ];
+  ], [
+    rr:predicate geo:hasGeometry;
+    rr:objectMap [
+      rr:termType rr:BlankNode;
+      rr:template "geo-{.paddedArsId}"
+    ];
+  ], [
+    rr:predicate dbo:nutsCode;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rr:datatype xsd:string;
+      rml:reference ".nuts"
+    ];
+  ], [
+    rr:predicate codeforde:dlmObjectId;
+    rr:objectMap [
+      rr:termType rr:Literal;
+      rr:datatype xsd:string;
+      rml:reference ".dlmObjectId"
+    ];
+  ].
+
+## geometry blank nodes (1:1)
+
+[ a rr:TriplesMap ]
+  rml:logicalSource [
+    rml:source "data/processed.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$[*]"
+  ];
+  rr:subjectMap [
+    rr:termType rr:BlankNode;
+    rr:template "geo-{.paddedArsId}";
+    rr:class geo:Geometry
+  ];
+  rr:predicateObjectMap [
+    rr:predicate geo:hasMetricArea;
+    rr:objectMap [
+      rr:datatype xsd:decimal;
+      rr:termType rr:Literal;
+      rml:reference "$.areaMeasurementInSquareMeters"
+    ]
+  ], [
+    rr:predicate geo:dimension;
+    rr:objectMap [
+      rr:datatype xsd:integer;
+      rr:termType rr:Literal;
+      rr:template "2"
+    ]
+  ], [
+    rr:predicate geo:asWKT;
+    rr:objectMap [
+      rr:datatype xsd:string;
+      rr:termType rr:Literal;
+      rml:reference "$.areaGeometryWkt"
+    ]
+  ].
