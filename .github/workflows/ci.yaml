@@ -115,3 +115,11 @@ jobs:
         else
           echo 'file unchanged, skipping.'
         fi;
+        currentobj=$(aws s3api head-object --bucket $S3_BUCKET_NAME --key vg250-ew/data-with-geometries.ttl.gz || echo 'not-yet-existing');
+        newhash=$(cat linked-data/vg250-ew/data/output-geo.ttl.gz | md5sum);
+        if [ $(echo $currentobj | grep $newhash | wc -l) -ne 1 ]
+        then
+          aws s3 cp --acl public-read linked-data/vg250-ew/data/output-geo.ttl.gz s3://"$S3_BUCKET_NAME"/vg250-ew/data-with-geometries.ttl.gz
+        else
+          echo 'file unchanged, skipping.'
+        fi;

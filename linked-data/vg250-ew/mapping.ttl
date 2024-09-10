@@ -245,11 +245,4 @@
       rr:termType rr:Literal;
       rr:template "2"
     ]
-  ], [
-    rr:predicate geo:asWKT;
-    rr:objectMap [
-      rr:datatype xsd:string;
-      rr:termType rr:Literal;
-      rml:reference "$.areaGeometryWkt"
-    ]
   ].

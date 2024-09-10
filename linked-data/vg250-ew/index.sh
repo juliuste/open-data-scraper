@@ -17,8 +17,10 @@ env SOURCE="$DATA_DIR/source.json" node --no-warnings=ExperimentalWarning --load
 
 echo 'Applying mapping…'
 java -jar "$BIN_DIR/rmlmapper.jar" -m "$DIR/mapping.ttl" -s turtle --strict --base-iri "$BASE_IRI" > "$DATA_DIR/output.ttl"
+java -jar "$BIN_DIR/rmlmapper.jar" -m "$DIR/mapping.ttl" -m "$DIR/mapping-geo.ttl" -s turtle --strict --base-iri "$BASE_IRI" > "$DATA_DIR/output-geo.ttl"
 
 echo 'Compressing output…'
 cat "$DATA_DIR/output.ttl" | gzip > "$DATA_DIR/output.ttl.gz"
+cat "$DATA_DIR/output-geo.ttl" | gzip > "$DATA_DIR/output-geo.ttl.gz"
 
 echo 'Done.'
