@@ -33,7 +33,7 @@ codeforde: a owl:Ontology, cc:Work ;
   vann:preferredNamespacePrefix "codeforde" ;
   vann:preferredNamespaceUri "https://lod.codefor.de/vocabulary/codeforde/" ;
   dct:creator [ foaf:mbox "mail@juliustens.eu"; foaf:name "Julius Tens" ] ;
-  owl:versionInfo "0.1.0" ;
+  owl:versionInfo "0.1.1" ;
   cc:license <https://creativecommons.org/publicdomain/zero/1.0/> .
 
 # classes
@@ -104,7 +104,7 @@ codeforde:Gemeinde a owl:Class;
 codeforde:ars a owl:DatatypeProperty;
   rdfs:label "ARS, Amtlicher Regionalschlüssel (Deutschland)"@de;
   rdfs:range xsd:string;
-  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
+  schema:domainIncludes codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
   rdfs:subPropertyOf dct:identifier;
   owl:equivalentProperty wdt:P439;
   status:term_status "unstable"@en;
@@ -114,7 +114,7 @@ codeforde:ars a owl:DatatypeProperty;
 codeforde:ags a owl:DatatypeProperty;
   rdfs:label "AGS, Amtlicher Gemeindeschlüssel (Deutschland)"@de;
   rdfs:range xsd:string;
-  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Gemeinde;
+  schema:domainIncludes codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Gemeinde;
   rdfs:subPropertyOf dct:identifier;
   owl:equivalentProperty wdt:P1388;
   status:term_status "unstable"@en;
@@ -125,7 +125,7 @@ codeforde:dlmObjectId a owl:DatatypeProperty;
   rdfs:label "DLM object id"@en, "DLM-Obkekt-ID"@de;
   rdfs:comment "ID im Digitalen Landschaftsmodell (DLM)"@de;
   rdfs:range xsd:string;
-  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
+  schema:domainIncludes codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft, codeforde:Gemeinde;
   rdfs:subPropertyOf dct:identifier;
   status:term_status "unstable"@en;
   rdfs:isDefinedBy codeforde:;
@@ -135,7 +135,7 @@ codeforde:seatOfAdministration a owl:ObjectProperty;
   rdfs:label "Seat of Administration (Germany)"@en, "Verwaltungssitz (Deutschland)"@de;
   rdfs:comment "Municipality which contains the seat of administration for this administrative entity"@en, "Gemeinde, in der sich der Verwaltungssitz dieser Verwaltungseinheit befindet"@de;
   rdfs:range codeforde:Gemeinde;
-  rdfs:domain codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft;
+  schema:domainIncludes codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft;
   rdfs:subPropertyOf wdt:Q1306755;
   status:term_status "unstable"@en;
   rdfs:isDefinedBy codeforde:.
