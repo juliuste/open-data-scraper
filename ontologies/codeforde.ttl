@@ -136,6 +136,5 @@ codeforde:seatOfAdministration a owl:ObjectProperty;
   rdfs:comment "Municipality which contains the seat of administration for this administrative entity"@en, "Gemeinde, in der sich der Verwaltungssitz dieser Verwaltungseinheit befindet"@de;
   rdfs:range codeforde:Gemeinde;
   schema:domainIncludes codeforde:Bundesland, codeforde:Regierungsbezirk, codeforde:Kreis, codeforde:Verwaltungsgemeinschaft;
-  rdfs:subPropertyOf wdt:Q1306755;
   status:term_status "unstable"@en;
   rdfs:isDefinedBy codeforde:.
