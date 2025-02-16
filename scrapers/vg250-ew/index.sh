@@ -48,6 +48,10 @@ ogr2ogr -f GeoJSON "$STEP_1_DIR/zusatzbezeichnungen.json" "$SOURCE_DIR/VGTB_AZB_
 ogr2ogr -f GeoJSON "$STEP_1_DIR/uebersetzungen.json" "$SOURCE_DIR/VGTB_RGS_VG.dbf"
 
 echo 'Mapping…'
-node --no-warnings=ExperimentalWarning --loader ts-node/esm "$DIR/map.ts" | gzip > "$DATA_DIR/output.json.gz"
+node --no-warnings=ExperimentalWarning --loader ts-node/esm "$DIR/map.ts" > $DATA_DIR/output.json
+cat $DATA_DIR/output.json | gzip > "$DATA_DIR/output.json.gz"
+
+echo 'Generating AGS/ARS lookup table…'
+node --no-warnings=ExperimentalWarning --loader ts-node/esm "$DIR/lookup.ts" | gzip > "$DATA_DIR/ags2ars.json.gz"
 
 echo 'Done.'
